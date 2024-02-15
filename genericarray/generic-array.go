@@ -1,56 +1,58 @@
 package genericarray
 
+import "github.com/jd78/gogenericcollections/genericmap"
+
 type GenericArray[K comparable] []K
 
 func NewGenericArray[K comparable]() GenericArray[K] {
-    return make(GenericArray[K], 0)
+	return make(GenericArray[K], 0)
 }
 
 func NewGenericArrayFrom[K comparable](origin []K) GenericArray[K] {
-    a := make(GenericArray[K], 0)
-    for _, v := range origin {
-        a.Add(v)
-    }
-    return a
+	a := make(GenericArray[K], 0)
+	for _, v := range origin {
+		a.Add(v)
+	}
+	return a
 }
 
 func (a *GenericArray[K]) Add(val K) {
-    *a = append(*a, val)
+	*a = append(*a, val)
 }
 
 func (a *GenericArray[K]) AddAll(origin []K) GenericArray[K] {
-    for _, v := range origin {
-        a.Add(v)
-    }
-    return *a
+	for _, v := range origin {
+		a.Add(v)
+	}
+	return *a
 }
 
 func (a GenericArray[K]) MapValues(predicate func(K) K) GenericArray[K] {
-    mapped := NewGenericArray[K]()
-    for _, v := range a {
-        mapped.Add(predicate(v))
-    }
-    return mapped
+	mapped := NewGenericArray[K]()
+	for _, v := range a {
+		mapped.Add(predicate(v))
+	}
+	return mapped
 }
 
 func MapArray[K, V comparable](a GenericArray[K], predicate func(K) V) GenericArray[V] {
-    mappedArray := NewGenericArray[V]()
+	mappedArray := NewGenericArray[V]()
 
-    for _, item := range a {
-        mappedItem := predicate(item)
-        mappedArray.Add(mappedItem)
-    }
+	for _, item := range a {
+		mappedItem := predicate(item)
+		mappedArray.Add(mappedItem)
+	}
 
-    return mappedArray
+	return mappedArray
 }
 
-func ArrayToMap[K, V, Z comparable](a GenericArray[K], predicate func(K) (V, Z)) GenericMap[V, Z] {
-    m := NewGenericMap[V, Z]()
+func ArrayToMap[K, V, Z comparable](a GenericArray[K], predicate func(K) (V, Z)) genericmap.GenericMap[V, Z] {
+	m := genericmap.New[V, Z]()
 
-    for _, item := range a {
-        first, second := predicate(item)
-        m.Add(first, second)
-    }
+	for _, item := range a {
+		first, second := predicate(item)
+		m.Add(first, second)
+	}
 
-    return m
+	return m
 }
