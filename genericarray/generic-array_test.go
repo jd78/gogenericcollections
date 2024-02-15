@@ -8,7 +8,7 @@ import (
 )
 
 func TestGenericArray_Add(t *testing.T) {
-	array := NewGenericArray[int]()
+	array := New[int]()
 
 	array.Add(1)
 
@@ -18,7 +18,7 @@ func TestGenericArray_Add(t *testing.T) {
 
 func TestGenericArray_AddAll(t *testing.T) {
 	origin := []int{1, 2, 3}
-	array := NewGenericArrayFrom(origin)
+	array := From(origin)
 
 	array.AddAll([]int{4, 5})
 
@@ -27,7 +27,7 @@ func TestGenericArray_AddAll(t *testing.T) {
 }
 
 func TestGenericArray_MapValues(t *testing.T) {
-	array := NewGenericArray[int]()
+	array := New[int]()
 	array.Add(1)
 	array.Add(2)
 	array.Add(3)
@@ -41,7 +41,7 @@ func TestGenericArray_MapValues(t *testing.T) {
 }
 
 func TestMapArray(t *testing.T) {
-	array := NewGenericArray[int]()
+	array := New[int]()
 	array.Add(1)
 	array.Add(2)
 	array.Add(3)
@@ -55,7 +55,7 @@ func TestMapArray(t *testing.T) {
 }
 
 func TestArrayToMap(t *testing.T) {
-	array := NewGenericArray[int]()
+	array := New[int]()
 	array.Add(1)
 	array.Add(2)
 	array.Add(3)
