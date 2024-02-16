@@ -47,9 +47,12 @@ func TestGenericArray_Composition(t *testing.T) {
 		Add(3).
 		MapValues(func(val int) int {
 			return val * 2
+		}).
+		Filter(func(val int) bool {
+			return val < 6
 		})
 
-	expected := []int{2, 4, 6}
+	expected := []int{2, 4}
 	assert.ElementsMatch(t, expected, []int(array.ToArray()))
 }
 
