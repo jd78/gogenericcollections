@@ -9,11 +9,10 @@ import (
 
 func main() {
 	a := genericarray.New[int]()
-
 	a.Add(1)
 	a.Add(2)
 
-	for k := range a {
+	for k := range *a {
 		println(k)
 	}
 
