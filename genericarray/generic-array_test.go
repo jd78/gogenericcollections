@@ -13,7 +13,7 @@ func TestGenericArray_Add(t *testing.T) {
 	array.Add(1)
 
 	expected := []int{1}
-	assert.ElementsMatch(t, expected, array)
+	assert.ElementsMatch(t, expected, *array)
 }
 
 func TestGenericArray_AddAll(t *testing.T) {
