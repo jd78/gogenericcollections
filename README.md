@@ -37,11 +37,10 @@ for k, v := range mappedM.ToMap() {
 
 ```go
 a := genericarray.New[int]()
-
 a.Add(1)
 a.Add(2)
 
-for k := range a {
+for k := range *a {
     println(k)
 }
 
@@ -49,7 +48,7 @@ aplus1 := a.MapValues(func(i int) int {
     return i + 1
 })
 
-for k := range aplus1 {
+for k := range aplus1.ToArray() {
     println(k)
 }
 

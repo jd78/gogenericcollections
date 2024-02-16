@@ -1,8 +1,8 @@
 package genericmap
 
 import (
-	"github.com/jd78/gogenericcollections/composition/filter"
-	mapvalues "github.com/jd78/gogenericcollections/composition/map-values"
+	mapfilter "github.com/jd78/gogenericcollections/composition/filter/map-filter"
+	mapvalues "github.com/jd78/gogenericcollections/composition/transform/map-values"
 )
 
 type GenericMap[K comparable, V any] map[K]V
@@ -41,7 +41,7 @@ func (m GenericMap[K, V]) Delete(key K) {
 
 // Filter proxy filtered map by predicates
 func (m GenericMap[K, V]) Filter(predicate func(K, V) bool) *ProxedMap[K, V] {
-	filter := filter.New[K, V]()
+	filter := mapfilter.New[K, V]()
 	filter.AddFilter(predicate)
 	return NewWithFilter(m, filter)
 }

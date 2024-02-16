@@ -1,4 +1,4 @@
-package filter
+package mapfilter
 
 type Filter[K comparable, V any] struct {
 	predicates []func(K, V) bool

@@ -21,7 +21,7 @@ func main() {
 		return i + 1
 	})
 
-	for k := range aplus1 {
+	for k := range aplus1.ToArray() {
 		println(k)
 	}
 

@@ -1,22 +1,22 @@
 package genericmap
 
 import (
-	"github.com/jd78/gogenericcollections/composition/filter"
-	mapvalues "github.com/jd78/gogenericcollections/composition/map-values"
+	mapfilter "github.com/jd78/gogenericcollections/composition/filter/map-filter"
+	mapvalues "github.com/jd78/gogenericcollections/composition/transform/map-values"
 )
 
 type ProxedMap[K comparable, V any] struct {
 	genericMap GenericMap[K, V]
-	filter     *filter.Filter[K, V]
+	filter     *mapfilter.Filter[K, V]
 	mapValues  *mapvalues.MapValues[K, V]
 }
 
-func NewWithFilter[K comparable, V any](g GenericMap[K, V], f *filter.Filter[K, V]) *ProxedMap[K, V] {
+func NewWithFilter[K comparable, V any](g GenericMap[K, V], f *mapfilter.Filter[K, V]) *ProxedMap[K, V] {
 	return &ProxedMap[K, V]{g, f, mapvalues.New[K, V]()}
 }
 
 func NewWithMapValues[K comparable, V any](g GenericMap[K, V], m *mapvalues.MapValues[K, V]) *ProxedMap[K, V] {
-	return &ProxedMap[K, V]{g, filter.New[K, V](), m}
+	return &ProxedMap[K, V]{g, mapfilter.New[K, V](), m}
 }
 
 func (f *ProxedMap[K, V]) Filter(predicate func(K, V) bool) *ProxedMap[K, V] {
