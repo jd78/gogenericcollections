@@ -23,13 +23,13 @@ func main() {
 
 	f := m.Filter(func(i int, v string) bool { return i == 2 })
 
-	for k, v := range f {
+	for k, v := range f.ToMap() {
 		fmt.Printf("filtered k=%d, v=%s\n", k, v)
 	}
 
 	mappedM := m.MapValues(func(i int, v string) string {
 		return v + "edited"
-	})
+	}).ToMap()
 
 	for k, v := range mappedM {
 		fmt.Printf("mapped k=%d, v=%s\n", k, v)
