@@ -1,8 +1,7 @@
 package genericarray
 
 import (
-	arrayfilter "github.com/jd78/gogenericcollections/composition/filter/array-filter"
-	arrayvalues "github.com/jd78/gogenericcollections/composition/transform/array-values"
+	"github.com/jd78/gogenericcollections/composition/arraycomposition"
 	"github.com/jd78/gogenericcollections/genericmap"
 )
 
@@ -37,17 +36,19 @@ func (a *GenericArray[K]) AddAll(origin []K) *GenericArray[K] {
 }
 
 // MapValues transforms the array values running the passed predicate
-func (a *GenericArray[K]) MapValues(predicate func(K) K) *ProxedArray[K] {
-	mapValues := arrayvalues.New[K]()
-	mapValues.Map(predicate)
-	return NewWithMapValues[K](*a, mapValues)
+func (a *GenericArray[K]) MapValues(predicate arraycomposition.MapValues[K]) *ProxedArray[K] {
+	ac := arraycomposition.New[K]()
+	ac.AddFunction(predicate)
+	pa := NewProxedArray(a, ac)
+	return pa
 }
 
 // Filter filters the values of the array running the passed predicate
-func (a *GenericArray[K]) Filter(predicate func(K) bool) *ProxedArray[K] {
-	filter := arrayfilter.New[K]()
-	filter.AddFilter(predicate)
-	return NewWithFilter[K](*a, filter)
+func (a *GenericArray[K]) Filter(predicate arraycomposition.Filter[K]) *ProxedArray[K] {
+	ac := arraycomposition.New[K]()
+	ac.AddFunction(predicate)
+	pa := NewProxedArray(a, ac)
+	return pa
 }
 
 // MapArray creates a new array of type V running the passed predicate

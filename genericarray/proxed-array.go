@@ -1,43 +1,48 @@
 package genericarray
 
 import (
-	arrayfilter "github.com/jd78/gogenericcollections/composition/filter/array-filter"
-	arrayvalues "github.com/jd78/gogenericcollections/composition/transform/array-values"
+	"github.com/jd78/gogenericcollections/composition"
+	"github.com/jd78/gogenericcollections/composition/arraycomposition"
 )
 
 type ProxedArray[K comparable] struct {
-	genericArray GenericArray[K]
-	filter       *arrayfilter.Filter[K]
-	mapValues    *arrayvalues.MapValues[K]
+	genericArray *GenericArray[K]
+	composition  *arraycomposition.ArrayComposition[K]
 }
 
-func NewWithFilter[K comparable](g GenericArray[K], f *arrayfilter.Filter[K]) *ProxedArray[K] {
-	return &ProxedArray[K]{g, f, arrayvalues.New[K]()}
+func NewProxedArray[K comparable](g *GenericArray[K], ac *arraycomposition.ArrayComposition[K]) *ProxedArray[K] {
+	return &ProxedArray[K]{g, ac}
 }
 
-func NewWithMapValues[K comparable](g GenericArray[K], m *arrayvalues.MapValues[K]) *ProxedArray[K] {
-	return &ProxedArray[K]{g, arrayfilter.New[K](), m}
+func (pa *ProxedArray[K]) Filter(predicate arraycomposition.Filter[K]) *ProxedArray[K] {
+	pa.composition.AddFunction(predicate)
+	return pa
 }
 
-func (f *ProxedArray[K]) Filter(predicate func(K) bool) *ProxedArray[K] {
-	f.filter.AddFilter(predicate)
-	return f
+func (pa *ProxedArray[K]) MapValues(predicate arraycomposition.MapValues[K]) *ProxedArray[K] {
+	pa.composition.AddFunction(predicate)
+	return pa
 }
 
-func (f *ProxedArray[K]) MapValues(predicate func(K) K) *ProxedArray[K] {
-	f.mapValues.Map(predicate)
-	return f
-}
-
-func (f *ProxedArray[K]) ToArray() GenericArray[K] {
-	composedFilters := f.filter.Compose()
-	composedMapValues := f.mapValues.Compose()
-
-	proxedArray := New[K]()
-	for _, value := range f.genericArray {
-		if composedFilters(value) {
-			proxedArray.Add(composedMapValues(value))
+func (pa *ProxedArray[K]) ToArray() GenericArray[K] {
+	a := New[K]()
+	for _, value := range *pa.genericArray {
+		shouldAdd := true
+		newVal := value
+		for _, p := range pa.composition.GetPredicates() {
+			switch p.GetType() {
+			case composition.Filter:
+				if !p.(arraycomposition.Filter[K]).Exec(newVal) {
+					shouldAdd = false
+					break
+				}
+			case composition.MapValues:
+				newVal = p.(arraycomposition.MapValues[K]).Exec(newVal)
+			}
+		}
+		if shouldAdd {
+			a.Add(newVal)
 		}
 	}
-	return *proxedArray
+	return *a
 }

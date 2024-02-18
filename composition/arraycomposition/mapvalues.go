@@ -1,0 +1,23 @@
+package arraycomposition
+
+import "github.com/jd78/gogenericcollections/composition"
+
+type MapValues[K comparable] func(K) K
+
+func (f MapValues[K]) GetType() composition.FunctionType {
+	return composition.MapValues
+}
+
+func (f MapValues[K]) Exec(val K) K {
+	return f(val)
+}
+
+// func (f *mapValues[K]) compose() func(K) K {
+// 	return func(value K) K {
+// 		result := value
+// 		for _, predicate := range f.predicates {
+// 			result = predicate(value)
+// 		}
+// 		return result
+// 	}
+// }
