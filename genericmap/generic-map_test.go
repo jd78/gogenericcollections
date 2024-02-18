@@ -45,11 +45,13 @@ func TestGenericMap_Filter(t *testing.T) {
 
 	filtered := m.Filter(func(key string, value int) bool {
 		return value >= 1
+	}).MapValues(func(key string, value int) int {
+		return value * 2
 	}).Filter(func(key string, value int) bool {
 		return value < 3
 	})
 
-	expected := map[string]int{"one": 1, "two": 2}
+	expected := map[string]int{"one": 2}
 	assert.Equal(t, expected, map[string]int(filtered.ToMap()))
 }
 

@@ -11,14 +11,3 @@ func (f Filter[K]) GetType() composition.FunctionType {
 func (f Filter[K]) Exec(val K) bool {
 	return f(val)
 }
-
-// func (f *filter[K]) compose() func(K) bool {
-// 	return func(value K) bool {
-// 		for _, predicate := range f.predicates {
-// 			if !predicate(value) {
-// 				return false
-// 			}
-// 		}
-// 		return true
-// 	}
-// }

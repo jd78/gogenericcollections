@@ -11,13 +11,3 @@ func (f MapValues[K]) GetType() composition.FunctionType {
 func (f MapValues[K]) Exec(val K) K {
 	return f(val)
 }
-
-// func (f *mapValues[K]) compose() func(K) K {
-// 	return func(value K) K {
-// 		result := value
-// 		for _, predicate := range f.predicates {
-// 			result = predicate(value)
-// 		}
-// 		return result
-// 	}
-// }
