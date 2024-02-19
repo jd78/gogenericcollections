@@ -1,5 +1,9 @@
 package genericmap
 
+import (
+	"github.com/jd78/gogenericcollections/composition/mapcomposition"
+)
+
 type GenericMap[K comparable, V any] map[K]V
 
 // New initialize a new generic map
@@ -14,8 +18,9 @@ func (m GenericMap[K, V]) HasKey(key K) bool {
 }
 
 // Add adds an element
-func (m GenericMap[K, V]) Add(key K, value V) {
+func (m GenericMap[K, V]) Add(key K, value V) GenericMap[K, V] {
 	m[key] = value
+	return m
 }
 
 // Get gets a value
@@ -33,24 +38,20 @@ func (m GenericMap[K, V]) Delete(key K) {
 	delete(m, key)
 }
 
-// Filter filters the map creating a new map using the passing predicate
-func (m GenericMap[K, V]) Filter(predicate func(K, V) bool) GenericMap[K, V] {
-	filteredMap := New[K, V]()
-	for key, value := range m {
-		if predicate(key, value) {
-			filteredMap[key] = value
-		}
-	}
-	return filteredMap
+// Filter proxy filtered map by predicates
+func (m GenericMap[K, V]) Filter(predicate mapcomposition.Filter[K, V]) *ProxedMap[K, V] {
+	ac := mapcomposition.New[K, V]()
+	ac.AddFunction(predicate)
+	pa := NewProxedMap(m, ac)
+	return pa
 }
 
-// MapValues creates a new map changing the values using the passing predicate
-func (m GenericMap[K, V]) MapValues(predicate func(K, V) V) GenericMap[K, V] {
-	mapped := New[K, V]()
-	for key, value := range m {
-		mapped.Add(key, predicate(key, value))
-	}
-	return mapped
+// MapValues applies the predicate to the values
+func (m GenericMap[K, V]) MapValues(predicate mapcomposition.MapValues[K, V]) *ProxedMap[K, V] {
+	ac := mapcomposition.New[K, V]()
+	ac.AddFunction(predicate)
+	pa := NewProxedMap(m, ac)
+	return pa
 }
 
 // AddAll add all elements contained in the passed map

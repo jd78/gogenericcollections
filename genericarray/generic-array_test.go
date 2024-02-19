@@ -13,7 +13,7 @@ func TestGenericArray_Add(t *testing.T) {
 	array.Add(1)
 
 	expected := []int{1}
-	assert.ElementsMatch(t, expected, array)
+	assert.ElementsMatch(t, expected, *array)
 }
 
 func TestGenericArray_AddAll(t *testing.T) {
@@ -23,7 +23,7 @@ func TestGenericArray_AddAll(t *testing.T) {
 	array.AddAll([]int{4, 5})
 
 	expected := []int{1, 2, 3, 4, 5}
-	assert.ElementsMatch(t, expected, []int(array))
+	assert.ElementsMatch(t, expected, []int(*array))
 }
 
 func TestGenericArray_MapValues(t *testing.T) {
@@ -37,7 +37,23 @@ func TestGenericArray_MapValues(t *testing.T) {
 	})
 
 	expected := []int{2, 4, 6}
-	assert.ElementsMatch(t, expected, []int(mapped))
+	assert.ElementsMatch(t, expected, []int(mapped.ToArray()))
+}
+
+func TestGenericArray_Composition(t *testing.T) {
+	array := New[int]().
+		Add(1).
+		Add(2).
+		Add(3).
+		MapValues(func(val int) int {
+			return val * 2
+		}).
+		Filter(func(val int) bool {
+			return val < 6
+		})
+
+	expected := []int{2, 4}
+	assert.ElementsMatch(t, expected, []int(array.ToArray()))
 }
 
 func TestMapArray(t *testing.T) {
@@ -51,7 +67,7 @@ func TestMapArray(t *testing.T) {
 	})
 
 	expected := []string{"1+", "2+", "3+"}
-	assert.ElementsMatch(t, expected, []string(mapped))
+	assert.ElementsMatch(t, expected, []string(*mapped))
 }
 
 func TestArrayToMap(t *testing.T) {
