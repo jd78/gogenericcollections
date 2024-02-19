@@ -1,7 +1,6 @@
 package genericarray
 
 import (
-	"github.com/jd78/gogenericcollections/composition"
 	"github.com/jd78/gogenericcollections/composition/arraycomposition"
 )
 
@@ -30,14 +29,14 @@ func (pa *ProxedArray[K]) ToArray() GenericArray[K] {
 		shouldAdd := true
 		newVal := value
 		for _, p := range pa.composition.GetPredicates() {
-			switch p.GetType() {
-			case composition.Filter:
-				if !p.(arraycomposition.Filter[K]).Exec(newVal) {
+			switch predicate := p.(type) {
+			case arraycomposition.Filter[K]:
+				if !predicate.Exec(newVal) {
 					shouldAdd = false
 					break
 				}
-			case composition.MapValues:
-				newVal = p.(arraycomposition.MapValues[K]).Exec(newVal)
+			case arraycomposition.MapValues[K]:
+				newVal = predicate.Exec(newVal)
 			}
 		}
 		if shouldAdd {

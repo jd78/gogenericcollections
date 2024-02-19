@@ -1,5 +1,24 @@
 # gogenericcollections
 
+WIP eventually more methods to come..
+
+Streaming collections where you can chain functions like:
+
+```go
+m := New[string, int]()
+m.Add("one", 1)
+m.Add("two", 2)
+m.Add("three", 3)
+
+filtered := m.Filter(func(key string, value int) bool {
+    return value >= 1
+}).MapValues(func(key string, value int) int {
+    return value * 2
+}).Filter(func(key string, value int) bool {
+    return value < 3
+})
+```
+
 ## Generic Map example
 
 ```go

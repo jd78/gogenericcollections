@@ -1,7 +1,6 @@
 package genericmap
 
 import (
-	"github.com/jd78/gogenericcollections/composition"
 	"github.com/jd78/gogenericcollections/composition/mapcomposition"
 )
 
@@ -25,30 +24,19 @@ func (pm *ProxedMap[K, V]) MapValues(predicate mapcomposition.MapValues[K, V]) *
 }
 
 func (pm *ProxedMap[K, V]) ToMap() GenericMap[K, V] {
-	// composedFilters := f.filter.Compose()
-	// composedMapValues := f.mapValues.Compose()
-
-	// proxedMap := New[K, V]()
-	// for key, value := range f.genericMap {
-	// 	if composedFilters(key, value) {
-	// 		proxedMap[key] = composedMapValues(key, value)
-	// 	}
-	// }
-	// return proxedMap
-
 	a := New[K, V]()
 	for key, value := range pm.genericMap {
 		shouldAdd := true
 		newVal := value
 		for _, p := range pm.composition.GetPredicates() {
-			switch p.GetType() {
-			case composition.Filter:
-				if !p.(mapcomposition.Filter[K, V]).Exec(key, newVal) {
+			switch predicate := p.(type) {
+			case mapcomposition.Filter[K, V]:
+				if !predicate.Exec(key, newVal) {
 					shouldAdd = false
 					break
 				}
-			case composition.MapValues:
-				newVal = p.(mapcomposition.MapValues[K, V]).Exec(key, newVal)
+			case mapcomposition.MapValues[K, V]:
+				newVal = predicate.Exec(key, newVal)
 			}
 		}
 		if shouldAdd {
