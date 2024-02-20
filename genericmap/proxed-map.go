@@ -9,7 +9,7 @@ type ProxedMap[K comparable, V any] struct {
 	composition *mapcomposition.MapComposition[K, V]
 }
 
-func NewProxedMap[K comparable, V any](g GenericMap[K, V], ac *mapcomposition.MapComposition[K, V]) *ProxedMap[K, V] {
+func newProxedMap[K comparable, V any](g GenericMap[K, V], ac *mapcomposition.MapComposition[K, V]) *ProxedMap[K, V] {
 	return &ProxedMap[K, V]{g, ac}
 }
 

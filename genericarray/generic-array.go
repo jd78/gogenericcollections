@@ -39,7 +39,7 @@ func (a *GenericArray[K]) AddAll(origin []K) *GenericArray[K] {
 func (a *GenericArray[K]) MapValues(predicate arraycomposition.MapValues[K]) *ProxedArray[K] {
 	ac := arraycomposition.New[K]()
 	ac.AddFunction(predicate)
-	pa := NewProxedArray(a, ac)
+	pa := newProxedArray(a, ac)
 	return pa
 }
 
@@ -47,7 +47,7 @@ func (a *GenericArray[K]) MapValues(predicate arraycomposition.MapValues[K]) *Pr
 func (a *GenericArray[K]) Filter(predicate arraycomposition.Filter[K]) *ProxedArray[K] {
 	ac := arraycomposition.New[K]()
 	ac.AddFunction(predicate)
-	pa := NewProxedArray(a, ac)
+	pa := newProxedArray(a, ac)
 	return pa
 }
 

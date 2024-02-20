@@ -42,7 +42,7 @@ func (m GenericMap[K, V]) Delete(key K) {
 func (m GenericMap[K, V]) Filter(predicate mapcomposition.Filter[K, V]) *ProxedMap[K, V] {
 	ac := mapcomposition.New[K, V]()
 	ac.AddFunction(predicate)
-	pa := NewProxedMap(m, ac)
+	pa := newProxedMap(m, ac)
 	return pa
 }
 
@@ -50,7 +50,7 @@ func (m GenericMap[K, V]) Filter(predicate mapcomposition.Filter[K, V]) *ProxedM
 func (m GenericMap[K, V]) MapValues(predicate mapcomposition.MapValues[K, V]) *ProxedMap[K, V] {
 	ac := mapcomposition.New[K, V]()
 	ac.AddFunction(predicate)
-	pa := NewProxedMap(m, ac)
+	pa := newProxedMap(m, ac)
 	return pa
 }
 
