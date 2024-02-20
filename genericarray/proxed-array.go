@@ -9,7 +9,7 @@ type ProxedArray[K comparable] struct {
 	composition  *arraycomposition.ArrayComposition[K]
 }
 
-func NewProxedArray[K comparable](g *GenericArray[K], ac *arraycomposition.ArrayComposition[K]) *ProxedArray[K] {
+func newProxedArray[K comparable](g *GenericArray[K], ac *arraycomposition.ArrayComposition[K]) *ProxedArray[K] {
 	return &ProxedArray[K]{g, ac}
 }
 
