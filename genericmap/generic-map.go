@@ -69,3 +69,13 @@ func (m GenericMap[K, V]) AddAll(origin map[K]V) GenericMap[K, V] {
 	}
 	return m
 }
+
+func ToList[K comparable, V, Z any](m GenericMap[K, V], selector func(K, V) Z) []Z {
+	l := make([]Z, len(m))
+	index := 0
+	for k, v := range m {
+		l[index] = selector(k, v)
+		index++
+	}
+	return l
+}
