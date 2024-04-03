@@ -108,7 +108,6 @@ func TestGenericMap_Limit(t *testing.T) {
 	m.Add("three", 3)
 
 	filtered := m.Filter(func(key string, value int) bool {
-		println(value)
 		return value > 1
 	}).Limit(1)
 
@@ -119,4 +118,14 @@ func TestGenericMap_Limit(t *testing.T) {
 		}
 		return false
 	})
+}
+
+func TestGenericMap_ToList(t *testing.T) {
+	m := New[string, int]()
+	m.Add("three", 3)
+
+	l := ToList(m, func(_ string, v int) float32 {
+		return float32(v) * 1.3
+	})
+	assert.Equal(t, float32(3.8999999), l[0])
 }
