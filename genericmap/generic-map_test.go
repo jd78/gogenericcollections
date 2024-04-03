@@ -100,3 +100,17 @@ func TestGenericMap_Composition(t *testing.T) {
 	expected := map[string]int{"one": 2, "two": 4}
 	assert.Equal(t, expected, map[string]int(m.ToMap()))
 }
+
+func TestGenericMap_Limit(t *testing.T) {
+	m := New[string, int]()
+	m.Add("one", 1)
+	m.Add("two", 2)
+	m.Add("three", 3)
+
+	filtered := m.Filter(func(key string, value int) bool {
+		return value > 1
+	}).Limit(1)
+
+	expected := map[string]int{"two": 2}
+	assert.Equal(t, expected, map[string]int(filtered.ToMap()))
+}

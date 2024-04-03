@@ -46,6 +46,14 @@ func (m GenericMap[K, V]) Filter(predicate mapcomposition.Filter[K, V]) *ProxedM
 	return pa
 }
 
+// Limit the result
+func (m GenericMap[K, V]) Limit(limit int) *ProxedMap[K, V] {
+	ac := mapcomposition.New[K, V]()
+	ac.AddLimit(limit)
+	pa := newProxedMap(m, ac)
+	return pa
+}
+
 // MapValues applies the predicate to the values
 func (m GenericMap[K, V]) MapValues(predicate mapcomposition.MapValues[K, V]) *ProxedMap[K, V] {
 	ac := mapcomposition.New[K, V]()

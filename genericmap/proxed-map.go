@@ -23,7 +23,13 @@ func (pm *ProxedMap[K, V]) MapValues(predicate mapcomposition.MapValues[K, V]) *
 	return pm
 }
 
+func (pm *ProxedMap[K, V]) Limit(limit int) *ProxedMap[K, V] {
+	pm.composition.AddLimit(limit)
+	return pm
+}
+
 func (pm *ProxedMap[K, V]) ToMap() GenericMap[K, V] {
+	added := 0
 	a := New[K, V]()
 	for key, value := range pm.genericMap {
 		shouldAdd := true
@@ -40,7 +46,11 @@ func (pm *ProxedMap[K, V]) ToMap() GenericMap[K, V] {
 			}
 		}
 		if shouldAdd {
+			added++
 			a.Add(key, newVal)
+		}
+		if pm.composition.GetLimit() > 0 && added >= pm.composition.GetLimit() {
+			return a
 		}
 	}
 	return a
